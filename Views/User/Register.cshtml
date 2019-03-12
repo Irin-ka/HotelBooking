@@ -1,0 +1,44 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="d-flex h-75 justify-content-center align-items-start mrt-35 mrb-15">
+    <div class="container w-100 justify-content-center align-items-start">
+        <div class="row bg-warning mrb-3">
+            <div class="col col-12 font-weight-bold color-w">
+                <div class="d-flex justify-content-center align-items-center">
+                    Register Form
+                </div>
+            </div>
+        </div>
+        <form asp-action="Register" method="post" class="needs-validation" novalidate>
+            <div class="form-group">
+                <label for="username" class="color-gray">Username :</label>
+                <input asp-for="Username" type="text" class="form-control" id="username" placeholder="Enter username" required />
+                <div class="invalid-feedback">The Username is required</div>
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="password" class="color-gray">Password :</label>
+                <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Enter password" required />
+                <div class="invalid-feedback">The password field is required</div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="email" class="color-gray">Email :</label>
+                <input asp-for="Email" type="email" class="form-control" id="email" placeholder="Enter e-mail" required />
+                <div class="invalid-feedback">The e-mail field is required</div>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-col col-12">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-warning btn-outline-dark btn-lg">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!-- Login Page-->
+<div class="d-flex h-75 justify-content-center align-items-center mrt-35 mrb-15">
+    <div class="container w-50 justify-content-center align-items-center">
+        <div class="row bg-warning mrb-3">
+            <div class="col col-12 font-weight-bold color-w">
+                <div class="d-flex justify-content-center align-items-center">
+                    User Login
+                </div>
+            </div>
+        </div>
+        <form class="needs-validation mrb-15" asp-action="Login" method="post" novalidate>
+            <div class="form-group">
+                <label for="username" class="color-gray">Username :</label>
+                <input asp-for="Username" type="text" class="form-control" id="username" placeholder="Enter username" required />
+                <div class="invalid-feedback">The Username is required</div>
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="password" class="color-gray">Password :</label>
+                <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Enter password" required />
+                <div class="invalid-feedback">The password field is required</div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-check form-check-inline">
+                <label for="remember-me" class="form-check-label">Remember me</label>
+                <input asp-for="RememberMe" type="checkbox" class="form-check-input mrl-p5" id="remember-me" value="false" />
+            </div>
+            <div class="form-row">
+                <div class="form-col col-12">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-warning btn-outline-dark btn-lg">Login</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col col-auto">
+                Don&#39;t have an account?
+            </div>
+            <div class="col col-auto font-weight-light color-gray">
+                <a asp-action="Register">Click here to register</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Login Page-->

@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--Can be optimized out, calling specific scripts or stylesheets only in the docs they are needed-->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="~/lib/JqueryUI/jquery-ui.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/JqueryUI/jquery-ui.css" />
+    <link rel="stylesheet" href="~/lib/JqueryUI/theme.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/lib/css/styles.css" />
+
+    <script src="~/lib/Javascript/BootstrapValidationForm.js"></script>
+
+</head>
+
+<body>
+    <!-- Layout document to be used through the whole website.
+     Contains the common shared items(navbar and footer)-->
+
+    <!-- Start of navbar section-->
+    <nav class="navbar navbar-expand-sm fixed-top navbar-light bg-light" style="background-color:rgba(246,246,246,0.95) !important;">
+        <div class="container">
+            <a asp-action="Index" asp-controller="Home" class="navbar-brand">Hotels</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbar-content">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <div class="d-flex">
+                            <img src="~/lib/images/icons/home.svg" class="img-fluid" width="15" height="15" />
+                            <a asp-action="Index" asp-controller="Home" class="nav-link ml-auto">Home</a>
+                        </div>
+                    </li>
+                    @if (User.Identity.IsAuthenticated) {
+                        <li class="nav-item">
+                            <div class="d-flex">
+                                <img src="~/lib/images/icons/person.svg" class="img-fluid" width="15" height="15" />
+                                <a asp-action="Profile" asp-controller="Home" class="nav-link ml-auto">Profile</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <div class="d-flex">
+                                <img src="~/lib/images/icons/account-logout.svg" class="img-fluid" width="15" height="15" />
+                                <a asp-action="Logout" asp-controller="User" class="nav-link ml-auto">Log Out</a>
+                            </div>
+                        </li>
+                    } else {
+                        <li class="nav-item">
+                            <div class="d-flex">
+                                <img src="~/lib/images/icons/account-login.svg" class="img-fluid" width="15" height="15" />
+                                <a asp-action="Login" asp-controller="User" class="nav-link ml-auto">Log In</a>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End of navbar section -->
+
+    @RenderBody()
+
+    <!-- Start of footer section -->
+    <footer class="d-flex fixed-bottom justify-content-center footer-styles">
+        &copy; Erotokritos Vallianatos
+    </footer>
+    <!-- End of footer section -->
+</body>
+</html>

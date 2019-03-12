@@ -1,0 +1,121 @@
+﻿@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<!-- User profile page-->
+<div class="d-flex h-75 justify-content-center align-items-start mrt-35 mrb-15">
+    <div class="container w-25">
+        <div class="row justify-content-start align-items-center">
+            <div class="col col-12 text-warning font-weight-bold">
+                FAVORITES
+            </div>
+        </div>
+        @if (Model.Favorites.Any()) {
+            int i = 1;
+            @foreach (var favorite in Model.Favorites) {
+                <div class="row justify-content-center align-items-center">
+                    <div class="col col-12">
+                        <span class="font-weight-light">@i .</span>
+                        <span class="font-weight-bold">@favorite.Room.Name</span>
+                    </div>
+                </div>
+                i++;
+            }
+        } else {
+            <div class="row justify-content-center align-items-center">
+                <div class="col col-12">
+                    <span class="font-weight-light">You don't have any favorites yet</span>
+                </div>
+            </div>
+        }
+        <div class="row justify-content-start align-items-center">
+            <div class="col col-12 text-warning font-weight-bold">
+                REVIEWS
+            </div>
+        </div>
+        @if (Model.Reviews.Any()) {
+            int i = 1;
+            @foreach (var review in Model.Reviews) {
+                <div class="row justify-content-center align-items-center">
+                    <div class="col col-12">
+                        <span class="font-weight-light">@i</span>
+                        <span class="font-weight-bold">@review.Room.Name</span>
+                    </div>
+                </div>
+                <div class="row justify-content-end align-items-start">
+                    <div class="col col-12">
+                        @for (int j = 0; j < review.Rate; j++) {
+                            <span class="fa fa-star"></span>
+                        }
+                        @for (int j = 0; j < 5 - review.Rate; j++) {
+                            <span class="fa fa-star-o"></span>
+                        }
+                    </div>
+                </div>
+                i++;
+            }
+        } else {
+            <div class="row justify-content-center align-items-center">
+                <div class="col col-12">
+                    <span class="font-weight-light">You haven't made any reviews yet</span>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="container w-75">
+        <div class="mrb-3">
+            <div class="row justify-content-start align-items-center bg-warning">
+                <div class="col col-auto font-weight-bold color-w">
+                    My Bookings
+                </div>
+            </div>
+        </div>
+        @if (Model.Bookings.Any()) {
+            @foreach (var booking in Model.Bookings) {
+                <div class="row">
+                    <div class="col col-2 pl-0">
+                        <img src="~/lib/images/room-photos/@booking.Room.Photo" class="img-fluid" />
+                    </div>
+                    <div class="col col-10">
+                        <span class="font-weight-bold">@booking.Room.Name</span> <br />
+                        <span class="hotel-location">@booking.Room.City, @booking.Room.Area</span> <br />
+                        <span class="font-weight-light hotel-desc-short" id="hotel-short-description">@booking.Room.ShortDescription</span>
+                    </div>
+                </div>
+                <div class="row justify-content-end align-items-center">
+                    <a asp-action="Room" asp-controller="Room" asp-route-roomId="@booking.RoomId" class="btn btn-warning btn-outline-dark">Go to Room Page</a>
+                </div>
+                <div class="row mrb-15 mrt-1">
+                    <div class="col col-2 price-bar pl-0">
+                        Per Night: @booking.Room.Price&euro;
+                    </div>
+                    <div class="col col-3 dash">
+                        Check in Date: @booking.CheckInDate
+                    </div>
+                    <div class="col col-auto dash">
+                        |
+                    </div>
+                    <div class="col col-3 dash">
+                        Check Out Date : @booking.CheckOutDate
+                    </div>
+                    <div class="col col-auto dash">
+                        |
+                    </div>
+                    <div class="col col-3 dash">
+                        Type of Room: @booking.Room.RoomType.RoomType1
+                    </div>
+                </div>
+            }
+        } else {
+            <div class="row">
+                <div class="col col-12 font-weight-light">
+                    No bookings to show.
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!-- End of User Profile Page-->
+

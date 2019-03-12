@@ -1,0 +1,118 @@
+﻿@model RoomSearchModel
+
+@{ 
+    var cities = ViewData["Cities"] as IEnumerable<string>;
+    var roomTypes = ViewData["RoomTypes"] as IEnumerable<RoomType>;
+}
+
+<!--Search form in Search Results Page-->
+<div class="container w-50 h-100">
+    <div class="mrb-2">
+        <div class="row justify-content-center align-items-center">
+            <div class="col col-auto text-warning font-weight-bold">
+                FIND THE PERFECT
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center">
+            <div class="col col-auto text-warning font-weight-bold">
+                HOTEL
+            </div>
+        </div>
+    </div>
+    <form class="needs-validation" method="get" asp-controller="Search" asp-action="SearchResults" novalidate>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-6">
+                <select asp-for="GuestsCount" class="custom-select custom-select-lg mb-3" name="guestCount">
+                    <option value="">Count of Guests</option>
+                    <option value="1">One (1)</option>
+                    <option value="2">Two (2)</option>
+                    <option value="3">Three (3)</option>
+                    <option value="4">Four (4)</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-6">
+                <select asp-for="City" class="custom-select custom-select-lg mb-3" asp-items="@(new SelectList(cities))" name="city" required>
+                    <option value="">Select City</option>
+                </select>
+                <div class="invalid-feedback">The city field is required</div>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-6">
+                <select asp-for="RoomType" class="custom-select custom-select-lg mb-3" asp-items="@(new SelectList(roomTypes, "Id", "RoomType1"))" name="roomType" required>
+                    <option value="">Select Room Type</option>
+                </select>
+                <div class="invalid-feedback">The room type field is required</div>
+                <span asp-validation-for="RoomType" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-3">
+                <div>
+                    <label for="slider" id="slider-min" class="col-form-label-lg">&euro;0</label>
+                    <input asp-for="PriceMin" type="hidden" value="@(Model.PriceMin)" id="slider-min-input"/>
+                </div>
+            </div>
+            <div class="form-col col-md-3">
+                <div class="d-flex justify-content-end">
+                    <label for="slider" id="slider-max" class="col-form-label-lg">&euro;5000</label>
+                    <input asp-for="PriceMax" type="hidden" value="@(Model.PriceMax == null ? 5000 : Model.PriceMax)" id="slider-max-input" />
+                </div>
+            </div>
+        </div>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-6">
+                <div id="slider"></div>
+            </div>
+        </div>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-3">
+                <div class="d-flex justify-content-center">
+                    PRICE MIN.
+                </div>
+            </div>
+            <div class="form-col col-md-3">
+                <div class="d-flex justify-content-center">
+                    PRICE MAX.
+                </div>
+            </div>
+        </div>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-6">
+                <div class="d-flex justify-content-center align-items-center">
+                    <label for="checkIndate" class="col-form-label-lg">Check In Date</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-6">
+                <input asp-for="CheckInDate" name="checkIndate" class="custom-select custom-select-lg mb-3" id="datepicker-in" required />
+                <div class="invalid-feedback">The CheckInDate field is required</div>
+                <span asp-validation-for="CheckInDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-6">
+                <div class="d-flex justify-content-center align-items-center">
+                    <label for="checkOutdate" class="col-form-label-lg">Check Out Date</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-row justify-content-center align-items-center">
+            <div class="form-col col-md-6">
+                <input asp-for="CheckOutDate" name="checkOutdate" class="custom-select custom-select-lg mb-3" id="datepicker-out" required />
+                <div class="invalid-feedback">The CheckOutDate field is required</div>
+                <span asp-validation-for="CheckOutDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row justify-content-center">
+            <div class="form-col col-2">
+                <button type="submit" class="btn btn-warning btn-outline-dark btn-lg">FIND HOTEL</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!--End of Search Form-->

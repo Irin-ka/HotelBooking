@@ -1,0 +1,215 @@
+﻿@model RoomViewModel
+
+@{
+    ViewData["Title"] = Model.Room.Name;
+}
+
+<!--Room page View-->
+<div class="d-flex h-75 justify-content-center align-items-start mrt-35 mrb-3">
+    <div class="container">
+        <div class="row justify-content-start align-items-center bg-warning mrb-2 mrl-0 color-w">
+            <div class="col col-10 font-weight-bold">
+                @Model.Room.Name - @Model.Room.City, @Model.Room.Area | Reviews:
+                @for (int i = 0; i < Model.FullStars; i++) {
+                    <span class="fa fa-star"></span>
+                }
+                @for (int i = 0; i < Model.EmptyStars; i++) {
+                    <span class="fa fa-star-o"></span>
+                }
+                @if (User.Identity.IsAuthenticated) {
+                    <span>|</span>
+
+                    <a asp-action="ChangeFavorite" asp-route-roomId="@Model.Room.RoomId" asp-route-checkInDate="@Model.CheckInDate" asp-route-checkOutDate="@Model.CheckOutDate"
+                    style="text-decoration:none">
+
+                        @{  string heartClass = "";
+                            heartClass = Model.Favorites != null && Model.Favorites.Status != 0 ? "fa fa-heart" : "fa fa-heart-o";
+                        }
+
+                        <span class="@heartClass"></span>
+                    </a>
+                }
+            </div>
+            <div class="col col-2 font-weight-bold">
+                Per Night: @Model.Room.Price&euro;
+            </div>
+        </div>
+        <div class="row mrl-0">
+            <img src="~/lib/images/room-photos/@Model.Room.Photo" class="mrb-15" width="650" height="350" />
+        </div>
+
+        <div class="bg-warning mrb-15 color-w">
+            <div class="row justify-content-start align-items-center pl-p5">
+                <div class="col col-3">
+                    <img src="~/lib/images/icons/person.svg" class="img-fluid" /> @Model.Room.CountOfGuests
+                </div>
+                <div class="col col-2">
+                    @Model.Room.RoomTypeId
+                </div>
+                <div class="col col-2">
+                    @{ string hasParking = Model.Room.Parking == 0 ? "No" : "Yes";}
+                    <span>@hasParking</span>
+                </div>
+                <div class="col col-2">
+                    <img src="~/lib/images/icons/wifi.svg" class="img-fluid" />
+                    @{ string hasWifi = Model.Room.Wifi == 0 ? "No" : "Yes";}
+                    <span>@hasWifi</span>
+                </div>
+                <div class="col col-3">
+                    @{ string isPetFriendly = Model.Room.PetFriendly == 0 ? "No" : "Yes";}
+                    <span>@isPetFriendly</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-3 font-weight-light">
+                    COUNT OF GUESTS
+                </div>
+                <div class="col col-2 font-weight-light">
+                    TYPE OF ROOM
+                </div>
+                <div class="col col-2 font-weight-light">
+                    PARKING
+                </div>
+                <div class="col col-2 font-weight-light">
+                    WiFi
+                </div>
+                <div class="col col-3 font-weight-light">
+                    PET FRIENDLY
+                </div>
+            </div>
+        </div>
+        <div class="mrt-p5 mrb-1">
+            <div class="row">
+                <div class="col col-12 font-weight-bold">
+                    Room Description
+                </div>
+            </div>
+            <p class="font-weight-light">
+                @Model.Room.LongDescription
+            </p>
+        </div>
+        <div class="row mrb-3">
+            <div class="col col-3">
+                @if (User.Identity.IsAuthenticated) {
+                    if (Model.HasBooking) {
+                        <div class="container justify-content-end align-items-center bg-danger font-weight-bold color-w">
+                            Already Booked
+                        </div>
+                    } else {
+                        <div class="container justify-content-start align-items-center">
+                            <form asp-action="Booking" asp-route-roomId="@Model.Room.RoomId" asp-route-checkInDate="@Model.CheckInDate" asp-route-checkOutDate="@Model.CheckOutDate">
+                                <button type="submit" class="btn btn-warning btn-outline-dark btn-sm">
+                                    Book Now
+                                </button>
+                            </form>
+                        </div>
+                    }
+                } else {
+                    <div class="container justify-content-start align-items-center font-weight-bold color-w" margin-left:-15px;">
+                        <form asp-action="LoginPage" asp-controller="User">
+                            <button type="submit" class="btn btn-warning btn-outline-dark btn-sm">
+                                Log In to Book
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- Google maps API didn't show properly in my page, either it didn't show at all, or it covered the whole page.
+             Used Google's Photo capture API instead, which sends you a photo of the map at the location you request.-->
+        <div class="row mrb-2">
+            <div class="col col-12">
+                <img src="https://maps.googleapis.com/maps/api/staticmap?center=@Model.Room.LatLocation,@Model.Room.LngLocation&zoom=15&markers=@Model.Room.LatLocation,@Model.Room.LngLocation&size=400x300&maptype=roadmap&key=AIzaSyAnwbP39LW10thJs_mhaZUA5TtDJaq7Ong&callback=initMap" class="img-fluid" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-12">
+                <div class="container justify-content-start align-items-center font-weight-bold">
+                    Reviews
+                </div>
+            </div>
+        </div>
+        <div class="mrb-15">
+            @if (!Model.Reviews.Any()) {
+                <div class="row">
+                    <div class="col col-12 font-weight-light">
+                        There are no reviews for this room.
+                    </div>
+                </div>
+            } else {
+                int reviewCount = 1;
+                @foreach (var review in Model.Reviews) {
+                    <div class="row">
+                        <div class="col col-12">
+                            <div class="container justify-content-center align-items-center">
+                                @reviewCount . @review.User.Username
+                                @for (int i = 0; i < review.Rate; i++) {
+                                    <span class="fa fa-star"></span>
+                                }
+                                @for (int i = 0; i < 5 - review.Rate; i++) {
+                                    <span class="fa fa-star-o"></span>
+                                }
+                                <br />
+                                Add time: @review.DateCreated.ToString();
+                                <br />
+                                <span class="font-weight-light">@review.Text</span>
+                            </div>
+                        </div>
+                    </div>
+                    reviewCount++;
+                }
+            }
+        </div>
+        <div class="row">
+            <div class="col col-12">
+                <div class="container justify-content-start align-items-center font-weight-bold">
+                    Add Review
+                </div>
+            </div>
+        </div>
+        @if (User.Identity.IsAuthenticated) {
+            if (!Model.Reviews.Where(review => review.User.Equals(Model.UserLoged)).Any()) {
+                <div class="row">
+                    <div class="col col-12 star-container">
+                        <span class="fa fa-star" id="star-val-1"></span>
+                        <span class="fa fa-star-o" id="star-val-2"></span>
+                        <span class="fa fa-star-o" id="star-val-3"></span>
+                        <span class="fa fa-star-o" id="star-val-4"></span>
+                        <span class="fa fa-star-o" id="star-val-5"></span>
+                        <br />
+                    </div>
+                </div>
+                <form asp-action="SubmitReview" method="post" asp-route-roomId="@Model.Room.RoomId" asp-route-checkInDate="@Model.CheckInDate" asp-route-checkOutDate="@Model.CheckOutDate">
+                    <div class="form-row mrt-p5">
+                        <div class="form-col col-12">
+                            <input name="rating" type="hidden" id="star-rating-val" value="1" />
+                            <input name="text" type="text" class="form-control" maxlength="65535" placeholder="Review" />
+                        </div>
+                    </div>
+                    <div class="form-row justify-content-center mrt-1">
+                        <div class="form-col col-12">
+                            <button type="submit" class="btn btn-warning btn-outline-dark btn-sm">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            } else {
+                <div class="row">
+                    <div class="col col-12 font-weight-bold">
+                        You have already reviewed this room
+                    </div>
+                </div>
+            }
+        } else {
+            <div class="row">
+                <div class="col col-12">
+                    <div class="container justify-content-center align-items-start">
+                        <a asp-action="LoginPage" asp-controller="User" class="btn btn-warning btn-outline-dark btn-sm" role="button">Login to Review</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/lib/Javascript/StarRating.js"></script>
+<!--End of Room Page View-->

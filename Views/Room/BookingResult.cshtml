@@ -1,0 +1,22 @@
+﻿@model BookingResultViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Booking Result @Model.RoomName</title>
+</head>
+<body>
+    <div>
+           @Model.Message
+    </div>
+    <div>
+        <a asp-action="Room" asp-route-roomId="@Model.RoomId">Back</a>
+    </div>
+</body>
+</html>

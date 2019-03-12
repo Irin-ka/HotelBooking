@@ -1,0 +1,22 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register Result</title>
+</head>
+<body>
+    <div>
+            @{ string txt = ViewData["result"] as string;}
+        @txt
+    </div>
+    <div>
+        <a asp-action="Login">Back</a>
+    </div>
+</body>
+</html>
